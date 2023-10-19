@@ -18,7 +18,20 @@ type CreatePostRequest struct {
 	CategoryId int64  `json:"categoryId"`
 }
 
-func HandleCreatePost(ctx context.Context, db *sql.DB) func(w http.ResponseWriter, r *http.Request) {
+func HandlePosts(ctx context.Context, db *sql.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case http.MethodPost:
+			handleCreatePost(ctx, db)(w, r)
+		case http.MethodGet:
+			handleGetPosts(ctx, db)(w, r)
+		default:
+			w.WriteHeader(http.StatusNotFound)
+		}
+	}
+}
+
+func handleCreatePost(ctx context.Context, db *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		request := new(CreatePostRequest)
 
@@ -39,5 +52,17 @@ func HandleCreatePost(ctx context.Context, db *sql.DB) func(w http.ResponseWrite
 		fmt.Printf("Post : %+v\n", post)
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(fmt.Sprint(id)))
+	}
+}
+
+func handleGetPosts(ctx context.Context, db *sql.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// need to receive offset from request
+		posts := repository.GetPosts(db, 0)
+
+		w.WriteHeader(http.StatusOK)
+		w.Header().Add("Access-Control-Allow-Origin", "*")
+		w.Header().Add("Content-Type", "application/json")
+		w.Write([]byte(fmt.Sprint(posts)))
 	}
 }

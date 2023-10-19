@@ -24,7 +24,7 @@ func main() {
 	flag.Parse()
 
 	http.HandleFunc("/api/health", api.HandleApiHealthCheck)
-	http.HandleFunc("/api/posts", api.HandleCreatePost(context.Background(), db))
+	http.HandleFunc("/api/posts", api.HandlePosts(context.Background(), db))
 
 	http.ListenAndServe(*listenAddr, nil)
 
