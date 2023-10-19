@@ -1,14 +1,15 @@
 package repository
 
 import (
+	"context"
 	"database/sql"
 
 	"tmdgusya.com/todo/model"
 )
 
 // InsertCategory inserts a category into the database
-func InsertCategory(db *sql.DB, category *model.Category) int64 {
-	stmt, err := db.Prepare("INSERT INTO categories(name) VALUES(?)")
+func InsertCategory(db *sql.DB, ctx context.Context, category *model.Category) int64 {
+	stmt, err := db.PrepareContext(ctx, "INSERT INTO categories(name) VALUES(?)")
 
 	if err != nil {
 		panic(err.Error())
@@ -16,7 +17,7 @@ func InsertCategory(db *sql.DB, category *model.Category) int64 {
 
 	defer stmt.Close()
 
-	res, err := stmt.Exec(category.Name)
+	res, err := stmt.ExecContext(ctx, category.Name)
 
 	if err != nil {
 		panic(err.Error())
@@ -31,8 +32,8 @@ func InsertCategory(db *sql.DB, category *model.Category) int64 {
 	return lastId
 }
 
-func GetCategories(db *sql.DB) []model.Category {
-	stmt, err := db.Prepare("SELECT * FROM categories")
+func GetCategories(db *sql.DB, ctx context.Context) []model.Category {
+	stmt, err := db.PrepareContext(ctx, "SELECT * FROM categories")
 	var categories []model.Category = []model.Category{}
 
 	if err != nil {
@@ -41,7 +42,7 @@ func GetCategories(db *sql.DB) []model.Category {
 
 	defer stmt.Close()
 
-	rows, err := stmt.Query()
+	rows, err := stmt.QueryContext(ctx)
 
 	if err != nil {
 		panic(err.Error())

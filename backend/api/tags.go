@@ -41,7 +41,7 @@ func handleGetTagById(ctx context.Context, db *sql.DB) func(w http.ResponseWrite
 		if err != nil {
 			panic(fmt.Errorf("id(%s) is not integer", id))
 		}
-		tag := repository.GetTagById(db, idInt)
+		tag := repository.GetTagById(db, ctx, idInt)
 		w.Header().Add("Content-Type", "application/json")
 		w.Write([]byte(fmt.Sprint(tag)))
 	}
@@ -56,7 +56,7 @@ func handleCreateTag(ctx context.Context, db *sql.DB) func(w http.ResponseWriter
 	return func(w http.ResponseWriter, r *http.Request) {
 		request := new(CreateTagRequest)
 		json.NewDecoder(r.Body).Decode(request)
-		id := repository.InsertTag(db, &model.Tag{Name: request.Name, Color: request.Color})
+		id := repository.InsertTag(db, ctx, &model.Tag{Name: request.Name, Color: request.Color})
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(fmt.Sprint(id)))
 	}

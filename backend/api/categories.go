@@ -30,7 +30,7 @@ func HandleCategories(ctx context.Context, db *sql.DB) func(w http.ResponseWrite
 
 func handleGetCategories(ctx context.Context, db *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		categories := repository.GetCategories(db)
+		categories := repository.GetCategories(db, ctx)
 		w.Header().Add("Content-Type", "application/json")
 		w.Write([]byte(fmt.Sprint(categories)))
 	}
@@ -40,7 +40,7 @@ func handleCreateCategory(ctx context.Context, db *sql.DB) func(w http.ResponseW
 	return func(w http.ResponseWriter, r *http.Request) {
 		request := new(CreateCategoryRequest)
 		json.NewDecoder(r.Body).Decode(request)
-		id := repository.InsertCategory(db, &model.Category{Name: request.Name})
+		id := repository.InsertCategory(db, ctx, &model.Category{Name: request.Name})
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(fmt.Sprint(id)))
 	}

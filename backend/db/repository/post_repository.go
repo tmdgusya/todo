@@ -1,13 +1,14 @@
 package repository
 
 import (
+	"context"
 	"database/sql"
 
 	"tmdgusya.com/todo/model"
 )
 
 // InsertPost inserts a post into the database
-func InsertPost(db *sql.DB, p *model.Post) int64 {
+func InsertPost(db *sql.DB, ctx context.Context, p *model.Post) int64 {
 	stmt, err := db.Prepare("INSERT INTO posts(title, content, isChecked, createdAt, updatedAt, tagId, categoryId) VALUES(?,?,?,?,?,?,?)")
 
 	if err != nil {
@@ -16,7 +17,7 @@ func InsertPost(db *sql.DB, p *model.Post) int64 {
 
 	defer stmt.Close()
 
-	res, err := stmt.Exec(p.Title, p.Content, p.IsChecked, p.CreatedAt, p.UpdatedAt, p.TagId, p.CategoryId)
+	res, err := stmt.ExecContext(ctx, p.Title, p.Content, p.IsChecked, p.CreatedAt, p.UpdatedAt, p.TagId, p.CategoryId)
 
 	if err != nil {
 		panic(err.Error())
@@ -31,7 +32,7 @@ func InsertPost(db *sql.DB, p *model.Post) int64 {
 	return lastId
 }
 
-func GetPosts(db *sql.DB, offset int) []model.Post {
+func GetPosts(db *sql.DB, ctx context.Context, offset int) []model.Post {
 	stmt, err := db.Prepare("SELECT * FROM posts limit 10 offset ?")
 	var posts []model.Post = []model.Post{}
 	if err != nil {
@@ -40,7 +41,7 @@ func GetPosts(db *sql.DB, offset int) []model.Post {
 
 	defer stmt.Close()
 
-	rows, err := stmt.Query(offset)
+	rows, err := stmt.QueryContext(ctx, offset)
 
 	if err != nil {
 		panic(err.Error())

@@ -47,7 +47,7 @@ func handleCreatePost(ctx context.Context, db *sql.DB) func(w http.ResponseWrite
 			request.CategoryId,
 		)
 
-		id := repository.InsertPost(db, post)
+		id := repository.InsertPost(db, ctx, post)
 
 		fmt.Printf("Post : %+v\n", post)
 		w.WriteHeader(http.StatusOK)
@@ -58,7 +58,7 @@ func handleCreatePost(ctx context.Context, db *sql.DB) func(w http.ResponseWrite
 func handleGetPosts(ctx context.Context, db *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// need to receive offset from request
-		posts := repository.GetPosts(db, 0)
+		posts := repository.GetPosts(db, ctx, 0)
 
 		w.WriteHeader(http.StatusOK)
 		w.Header().Add("Access-Control-Allow-Origin", "*")
