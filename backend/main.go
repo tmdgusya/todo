@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"net/http"
@@ -23,6 +24,7 @@ func main() {
 	flag.Parse()
 
 	http.HandleFunc("/api/health", api.HandleApiHealthCheck)
+	http.HandleFunc("/api/posts", api.HandleCreatePost(context.Background(), db))
 
 	http.ListenAndServe(*listenAddr, nil)
 

@@ -1,0 +1,3 @@
+curl -X POST localhost:9000/api/posts \
+   -H "Content-Type: application/json" \
+   -d '{"title": "Hello Roach", "content": "content", "tagId": 1, "categoryId": 1}'  
