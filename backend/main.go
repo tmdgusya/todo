@@ -11,18 +11,20 @@ import (
 
 func main() {
 	listenAddr := flag.String("listen-addr", ":9000", "server listen address")
-	db := db.Connection{
+	connection := db.Connection{
 		Host:     "localhost",
 		Port:     8881,
 		User:     "root",
 		Password: "roach",
 		Database: "todos",
 	}
-	db.Connect()
+	db := connection.Connect()
 	fmt.Printf("%+v\n", db)
 	flag.Parse()
 
 	http.HandleFunc("/api/health", api.HandleApiHealthCheck)
 
 	http.ListenAndServe(*listenAddr, nil)
+
+	defer db.Close()
 }
