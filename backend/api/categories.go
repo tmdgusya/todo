@@ -30,6 +30,9 @@ func HandleCategories(ctx context.Context, db *sql.DB) func(w http.ResponseWrite
 
 func handleGetCategories(ctx context.Context, db *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
+		categories := repository.GetCategories(db)
+		w.Header().Add("Content-Type", "application/json")
+		w.Write([]byte(fmt.Sprint(categories)))
 	}
 }
 

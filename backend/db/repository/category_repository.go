@@ -30,3 +30,32 @@ func InsertCategory(db *sql.DB, category *model.Category) int64 {
 
 	return lastId
 }
+
+func GetCategories(db *sql.DB) []model.Category {
+	stmt, err := db.Prepare("SELECT * FROM categories")
+	var categories []model.Category = []model.Category{}
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer stmt.Close()
+
+	rows, err := stmt.Query()
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var category model.Category
+		if err := rows.Scan(&category.Id, &category.Name); err != nil {
+			panic(err.Error())
+		}
+		categories = append(categories, category)
+	}
+
+	return categories
+}
