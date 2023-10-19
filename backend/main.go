@@ -10,13 +10,13 @@ import (
 )
 
 func main() {
-	listenAddr := flag.String("listen-addr", ":8080", "server listen address")
+	listenAddr := flag.String("listen-addr", ":9000", "server listen address")
 	db := db.Connection{
 		Host:     "localhost",
-		Port:     8801,
+		Port:     8881,
 		User:     "root",
 		Password: "roach",
-		Database: "todo",
+		Database: "todos",
 	}
 	db.Connect()
 	fmt.Printf("%+v\n", db)
