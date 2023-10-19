@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"tmdgusya.com/todo/db/repository"
 	"tmdgusya.com/todo/model"
@@ -20,12 +21,29 @@ func HandleTags(ctx context.Context, db *sql.DB) func(w http.ResponseWriter, r *
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
-			handleGetTags(ctx, db)(w, r)
+			if r.URL.Query().Get("id") != "" {
+				handleGetTagById(ctx, db)(w, r)
+			} else {
+				handleGetTags(ctx, db)(w, r)
+			}
 		case http.MethodPost:
 			handleCreateTag(ctx, db)(w, r)
 		default:
 			w.WriteHeader(http.StatusNotFound)
 		}
+	}
+}
+
+func handleGetTagById(ctx context.Context, db *sql.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id := r.URL.Query().Get("id")
+		idInt, err := strconv.ParseInt(id, 10, 64)
+		if err != nil {
+			panic(fmt.Errorf("id(%s) is not integer", id))
+		}
+		tag := repository.GetTagById(db, idInt)
+		w.Header().Add("Content-Type", "application/json")
+		w.Write([]byte(fmt.Sprint(tag)))
 	}
 }
 
