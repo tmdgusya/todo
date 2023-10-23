@@ -21,11 +21,7 @@ func HandleTags(ctx context.Context, db *sql.DB) func(w http.ResponseWriter, r *
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
-			if r.URL.Query().Get("id") != "" {
-				handleGetTagById(ctx, db)(w, r)
-			} else {
-				handleGetTags(ctx, db)(w, r)
-			}
+			handleGetTags(ctx, db)(w, r)
 		case http.MethodPost:
 			handleCreateTag(ctx, db)(w, r)
 		default:
@@ -34,9 +30,9 @@ func HandleTags(ctx context.Context, db *sql.DB) func(w http.ResponseWriter, r *
 	}
 }
 
-func handleGetTagById(ctx context.Context, db *sql.DB) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		id := r.URL.Query().Get("id")
+func HandleGetTagById(ctx context.Context, db *sql.DB) func(w http.ResponseWriter, r *http.Request, matches []string) {
+	return func(w http.ResponseWriter, r *http.Request, matches []string) {
+		id := matches[1]
 		idInt, err := strconv.ParseInt(id, 10, 64)
 		if err != nil {
 			panic(fmt.Errorf("id(%s) is not integer", id))

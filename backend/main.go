@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"net/http"
+	"regexp"
 
 	"tmdgusya.com/todo/api"
 	"tmdgusya.com/todo/db"
@@ -20,13 +21,15 @@ func main() {
 		Database: "todos",
 	}
 	db := connection.Connect()
+	server := api.RegexpServeMux{}
+	server.AddRoute("GET", regexp.MustCompile("/api/health"), api.HandleApiHealthCheck)
+	server.AddRoute("GET", regexp.MustCompile("/api/posts"), api.HandlePosts(context.Background(), db))
+	server.AddRoute("GET", regexp.MustCompile("/api/categories"), api.HandleCategories(context.Background(), db))
+	server.AddRoute("POST", regexp.MustCompile("/api/tags"), api.HandleTags(context.Background(), db))
+	server.AddParamRoute("GET", regexp.MustCompile("/api/tags/([0-9]+)"), api.HandleGetTagById(context.Background(), db))
+	http.Handle("/", &server)
 	fmt.Printf("%+v\n", db)
 	flag.Parse()
-
-	http.HandleFunc("/api/health", api.HandleApiHealthCheck)
-	http.HandleFunc("/api/posts", api.HandlePosts(context.Background(), db))
-	http.HandleFunc("/api/categories", api.HandleCategories(context.Background(), db))
-	http.HandleFunc("/api/tags", api.HandleTags(context.Background(), db))
 
 	http.ListenAndServe(*listenAddr, nil)
 
