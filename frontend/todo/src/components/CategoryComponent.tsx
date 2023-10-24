@@ -1,7 +1,7 @@
 import { Box, Text, useColorMode, useColorModeValue } from "@chakra-ui/react";
 import React from "react";
 
-interface CategoryComponentProps {
+export interface CategoryComponentProps {
     id: string;
     name: string;
 }

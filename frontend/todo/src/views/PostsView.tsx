@@ -1,49 +1,11 @@
 import { Box, useColorModeValue } from "@chakra-ui/react";
 import PostComponent, { PostComponentProps } from "../components/PostComponent";
 
-export default function PostsView() {
-    const posts: PostComponentProps[] = [
-        {
-          id: "1",
-          title: "title",
-          content: "content",
-          isChecked: false,
-          createdAt: "2021-08-15",
-          tags: ["tag1", "tag2"],
-        },
-        {
-          id: "2",
-          title: "title",
-          content: "content",
-          isChecked: false,
-          createdAt: "2021-08-15",
-          tags: ["tag1", "tag2"],
-        },
-        {
-          id: "3",
-          title: "title",
-          content: "content",
-          isChecked: false,
-          createdAt: "2021-08-15",
-          tags: ["tag1", "tag2"],
-        },
-        {
-          id: "4",
-          title: "title",
-          content: "content",
-          isChecked: false,
-          createdAt: "2021-08-15",
-          tags: ["tag1", "tag2"],
-        },
-        {
-          id: "5",
-          title: "title",
-          content: "content",
-          isChecked: false,
-          createdAt: "2021-08-15",
-          tags: ["tag1", "tag2"],
-        },
-      ]
+interface PostsViewProps {
+    posts: PostComponentProps[];
+}
+
+export default function PostsView({posts}: PostsViewProps) {
     return <Box 
     border='1px' 
     borderColor={useColorModeValue('black', 'white')} 
