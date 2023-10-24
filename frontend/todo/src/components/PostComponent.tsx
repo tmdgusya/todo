@@ -14,7 +14,7 @@ export interface PostComponentProps {
 export default function PostComponent({id, title, content, isChecked, createdAt}: PostComponentProps) {
 
     // make card ui using chakra ui
-    return <Box id={id} width="200px" height="200px" borderWidth="1px" borderRadius="md" marginTop="2">
+    return <Box id={id} width="600px" height="150px" borderWidth="1px" borderRadius="md" marginTop="2" padding="2">
             <h1>{title}</h1>
             <p>{content}</p>
             <p>{isChecked}</p>
