@@ -1,9 +1,9 @@
 import React from "react";
-import { Box, useColorMode, useColorModeValue } from "@chakra-ui/react";
+import { Box, Heading, useColorMode, useColorModeValue } from "@chakra-ui/react";
 import CategoryComponent from "../components/CategoryComponent";
 
 export default function CategoriesView() {
-    const categorylist = [{id: "1", name: "JJ"}, {id: "1", name: "JJ"},{id: "1", name: "JJ"},{id: "1", name: "JJ"}]
+    const categorylist = [{id: "1", name: "TAG"}, {id: "1", name: "WORK"},{id: "1", name: "DOING"},{id: "1", name: "HOBBY"}]
     
     return <Box 
         marginRight={3}
@@ -14,8 +14,8 @@ export default function CategoriesView() {
         border="1px"
         rounded="md"
     >
-        <h1>Categories</h1>
-        <Box>
+        <Heading size='lg' fontFamily='monolisa'>Categories</Heading>
+        <Box marginTop='5'>
           {categorylist.map((category) => <CategoryComponent id={category.id} name={category.name} />)}
         </Box>
       </Box>

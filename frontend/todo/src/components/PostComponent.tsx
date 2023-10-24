@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Checkbox, Flex, Heading, Text, useColorModeValue } from "@chakra-ui/react";
 import React from "react";
 
 export interface PostComponentProps {
@@ -14,10 +14,23 @@ export interface PostComponentProps {
 export default function PostComponent({id, title, content, isChecked, createdAt}: PostComponentProps) {
 
     // make card ui using chakra ui
-    return <Box id={id} width="600px" height="150px" borderWidth="1px" borderRadius="md" marginTop="2" padding="2">
-            <h1>{title}</h1>
-            <p>{content}</p>
-            <p>{isChecked}</p>
-            <p>{createdAt}</p>
-        </Box>
+    return <Flex id={id} 
+                width="600px" 
+                height="150px" 
+                borderWidth="1px" 
+                borderRadius="md"
+                borderColor={useColorModeValue('gray.300', 'gray.500')}
+                marginTop="2" 
+                padding="2"
+            justifyContent="space-between"
+        >
+            <Box>
+            <Heading fontFamily='monolisa'>{title}</Heading>
+            <Text fontSize='lg' fontFamily='monolisa'>{content}</Text>
+            <Text fontFamily='monolisa'>{createdAt}</Text>
+            </Box>
+            <Box>
+                <Checkbox colorScheme="green" defaultChecked={isChecked} />
+            </Box>
+        </Flex>
 }

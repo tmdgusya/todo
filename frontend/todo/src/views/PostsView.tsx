@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, useColorModeValue } from "@chakra-ui/react";
 import PostComponent, { PostComponentProps } from "../components/PostComponent";
 
 export default function PostsView() {
@@ -44,15 +44,20 @@ export default function PostsView() {
           tags: ["tag1", "tag2"],
         },
       ]
-    return <Box border='1px' borderColor='white' rounded='md' padding='3'>
-    {posts.map((post) => <PostComponent 
-        key={post.id} 
-        id={post.id} 
-        title={post.title} 
-        content={post.content} 
-        isChecked={post.isChecked} 
-        createdAt={post.createdAt} 
-        tags={post.tags} 
-    />)}
+    return <Box 
+    border='1px' 
+    borderColor={useColorModeValue('black', 'white')} 
+    rounded='md' 
+    padding='3'
+    >
+        {posts.map((post) => <PostComponent 
+            key={post.id} 
+            id={post.id} 
+            title={post.title} 
+            content={post.content} 
+            isChecked={post.isChecked} 
+            createdAt={post.createdAt} 
+            tags={post.tags} 
+        />)}
   </Box>
 }
